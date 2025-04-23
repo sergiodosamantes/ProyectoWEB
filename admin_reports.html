@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel de Reportes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f5f7fa;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #0d6efd;
+    }
+
+    .table thead {
+      background-color: #e9ecef;
+    }
+
+    .btn-sm {
+      margin-right: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .table-responsive {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h3>Reportes de Usuarios</h3>
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Contenido ID</th>
+            <th>Usuario</th>
+            <th>Motivo</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Publicación</td>
+            <td>#123</td>
+            <td>juan@ejemplo.com</td>
+            <td>Spam</td>
+            <td>2025-04-22</td>
+            <td>
+              <button class="btn btn-sm btn-danger">Eliminar</button>
+              <button class="btn btn-sm btn-warning">Banear</button>
+            </td>
+          </tr>
+          <!-- Más reportes -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

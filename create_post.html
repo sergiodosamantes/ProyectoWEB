@@ -1,0 +1,65 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear Publicación</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .form-container {
+      max-width: 700px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #0d6efd;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="form-container">
+      <h3>Crear Nueva Publicación</h3>
+      <form>
+        <div class="mb-3">
+          <label for="title" class="form-label">Título</label>
+          <input type="text" class="form-control" id="title" placeholder="Escribe el título">
+        </div>
+        <div class="mb-3">
+          <label for="content" class="form-label">Contenido</label>
+          <textarea class="form-control" id="content" rows="5" placeholder="Comparte tu idea o proyecto..."></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="tags" class="form-label">Etiquetas</label>
+          <input type="text" class="form-control" id="tags" placeholder="tecnología, diseño, etc.">
+        </div>
+        <div class="mb-3">
+          <label for="attachment" class="form-label">Adjuntar archivo</label>
+          <input class="form-control" type="file" id="attachment" accept="image/png, video/mp4">
+        </div>
+        <button type="submit" class="btn btn-primary">Publicar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
