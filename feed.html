@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foro - Proyecto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f5f9ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .navbar {
+      background: linear-gradient(to right, #74ebd5, #9face6);
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: #ffffff !important;
+    }
+    .nav-link {
+      color: #ffffff !important;
+    }
+    .nav-link.active {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    .btn-outline-primary {
+      color: white;
+      border-color: white;
+    }
+    .btn-outline-primary:hover {
+      background-color: white;
+      color: #4a90e2;
+    }
+    .card {
+      border-radius: 15px;
+    }
+    .card-body h5 {
+      font-weight: bold;
+    }
+    .list-group-item {
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+      border-radius: 10px;
+    }
+    .list-group-item:hover {
+      background-color: #f1f7ff;
+    }
+    .list-group-item .btn {
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Proyecto</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link active" href="feed.html">Foro</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Perfil</a></li>
+        </ul>
+        <a href="create_post.html" class="btn btn-outline-primary">Crear Publicación</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Filtros laterales -->
+      <aside class="col-md-3">
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body">
+            <h5>Buscar proyectos</h5>
+            <input type="text" class="form-control mb-2" placeholder="Palabras clave">
+            <button class="btn btn-primary w-100">Filtrar</button>
+          </div>
+        </div>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5>Proyectos relevantes</h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Proyecto A</li>
+              <li class="list-group-item">Proyecto B</li>
+              <li class="list-group-item">Proyecto C</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Feed de publicaciones -->
+      <main class="col-md-9">
+        <div class="list-group">
+          <div class="list-group-item mb-3 shadow-sm">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">Título de la publicación</h5>
+              <small>hace 2 horas</small>
+            </div>
+            <p class="mb-1">Contenido de ejemplo de publicación...</p>
+            <div>
+              <button class="btn btn-sm btn-outline-success me-1">+ Votar</button>
+              <button class="btn btn-sm btn-outline-danger me-1">- Votar</button>
+              <a href="#" class="btn btn-sm btn-outline-secondary">Comentar</a>
+            </div>
+          </div>
+          <!-- Más publicaciones -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
