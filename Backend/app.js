@@ -10,10 +10,14 @@ app.get('/', (req, res) => {
   res.send('¡Bienvenido al backend!');
 });
 
-// Aquí irán las otras rutas: usuarios, publicaciones, etc.
+
 // Enlazar las rutas de usuarios
 const rutaUsuarios = require('./routes/usuarios');
 app.use('/usuarios', rutaUsuarios);
+
+//Publicaciones rutas
+const rutaPublicaciones = require('./routes/publicaciones');
+app.use('/publicaciones', rutaPublicaciones);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
