@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,38 +12,25 @@
       background: #f5f9ff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .navbar {
       background: linear-gradient(to right, #74ebd5, #9face6);
     }
+
     .navbar-brand {
       font-weight: bold;
       color: #ffffff !important;
     }
+
     .nav-link {
       color: #ffffff !important;
     }
+
     .card {
       border-radius: 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    .post-content {
-      background-color: white;
-      border-radius: 15px;
-      padding: 25px;
-      margin-bottom: 20px;
-    }
-    .comment-form {
-      background-color: white;
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    .comment {
-      background-color: white;
-      border-radius: 15px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
+
     .tag {
       background-color: #e9ecef;
       border-radius: 20px;
@@ -50,52 +38,53 @@
       margin-right: 5px;
       font-size: 0.8rem;
     }
+
     .btn-vote {
       border-radius: 8px;
     }
+
     .dropdown-menu {
       border-radius: 10px;
     }
-    .attachment {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 15px;
-    }
-    .comments-header {
-      background-color: #f8f9fa;
-      border-radius: 15px 15px 0 0;
-      padding: 10px 15px;
-      margin-bottom: 0;
-      font-weight: bold;
-    }
+
     .vote-count {
       font-weight: bold;
       margin: 0 10px;
     }
+
     .admin-actions {
-      display: none; /*solo visible para admins */
+      display: none;
     }
+
     .is-admin .admin-actions {
-      display: inline-block; /* solo visible para admins */
+      display: inline-block;
+    }
+
+    #detalle-publicacion {
+      background-color: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
+
 <body>
   <!-- Barra de navegación -->
   <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/feed" onclick="goFeed()">Proyecto</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false">
+      <a class="navbar-brand" href="/feed">Proyecto</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav"
+        aria-expanded="false">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="nav">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="feed.html">Foro</a></li>
-          <li class="nav-item"><a class="nav-link" href="profile.html">Perfil</a></li>
-          <!-- solo para administradores -->
-          <li class="nav-item admin-actions"><a class="nav-link" href="admin_reports.html">Reportes</a></li>
+          <li class="nav-item"><a class="nav-link" href="/feed">Foro</a></li>
+          <li class="nav-item"><a class="nav-link" href="/perfil">Perfil</a></li>
+          <li class="nav-item admin-actions"><a class="nav-link" href="/admin_reports">Reportes</a></li>
         </ul>
-        <a href="/post" onclick="goPost()" class="btn btn-outline-light">Crear Publicación</a>
+        <a href="/post" class="btn btn-outline-light">Crear Publicación</a>
       </div>
     </div>
   </nav>
@@ -103,7 +92,7 @@
   <!-- Contenido principal -->
   <div class="container mt-4">
     <div class="row">
-      <!-- recomendar  proyectos relevantes -->
+      <!-- Lado derecho: recomendaciones -->
       <aside class="col-lg-4 d-none d-lg-block">
         <div class="card shadow-sm mb-3">
           <div class="card-body">
@@ -117,95 +106,17 @@
         </div>
       </aside>
 
+      <!-- Lado izquierdo: detalle de publicación -->
       <main class="col-lg-8">
-        <!-- Publicación principal -->
-        <div class="post-content shadow-sm">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <h3>Título de la publicación</h3>
-              <small class="text-muted">Publicado por <a href="/perfil" onclick="goPerfil()">Usuario Ejemplo</a> - hace 3 horas</small>
-            </div>
-            <div class="dropdown">
-              <button class="btn btn-sm btn-outline-secondary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots"></i>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reportPostModal">Reportar</a></li>
-                <!-- Opción solo para el autor (borrar publi) -->
-                <li class="d-none author-option"><a class="dropdown-item text-danger" href="#">Eliminar publicación</a></li>
-                <!-- Opción solo para administradores (banear) -->
-                <li class="admin-actions"><a class="dropdown-item text-danger" href="#">Bloquear usuario</a></li>
-              </ul>
-            </div>
-          </div>
-          <p>Este es el contenido detallado de la publicación. Aquí el usuario describe su idea, proyecto o consulta con más detalle. El texto puede ser bastante extenso y puede incluir varios párrafos.</p>
-          <p>Este es un segundo párrafo para mostrar cómo se vería el contenido cuando es más largo y tiene múltiples párrafos de información.</p>
-          
-          
-          <!-- Etiquetas -->
-          <div class="mt-3">
-            <span class="tag">tecnología</span>
-            <span class="tag">diseño</span>
-            <span class="tag">innovación</span>
-          </div>
-          
-          <!-- Votación -->
-          <div class="d-flex align-items-center mt-3">
-            <button class="btn btn-sm btn-outline-success me-1 btn-vote">
-              👍 <span class="vote-count">24</span>
-            </button>
-            <button class="btn btn-sm btn-outline-danger me-3 btn-vote">
-              👎 <span class="vote-count">3</span>
-            </button>
-            <button class="btn btn-sm btn-outline-secondary">
-              <i class="bi bi-chat-left-text"></i> <span class="comment-count">5 comentarios</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Sección de comentarios -->
-        <div class="comment-form shadow-sm">
-          <h5>Agregar un comentario</h5>
-          <form>
-            <textarea class="form-control mb-2" rows="3" placeholder="Escribe tu comentario aquí..." required></textarea>
-            <div class="d-flex justify-content-between align-items-center">
-              <button type="submit" class="btn btn-primary">Publicar comentario</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="comments-header shadow-sm">
-          <i class="bi bi-chat-square-text"></i> 5 comentarios
-        </div>
-
-        <!-- Lista de comentarios -->
-        <div class="comment shadow-sm">
-          <div class="d-flex justify-content-between align-items-start mb-2">
-            <div>
-              <strong><a href="profile.html">Usuario1</a></strong>
-              <small class="text-muted ms-2">hace 1 hora</small>
-            </div>
-            <div class="dropdown">
-              <button class="btn btn-sm btn-outline-secondary p-1" type="button" data-bs-toggle="dropdown">
-                <i class="bi bi-three-dots"></i>
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reportCommentModal" data-comment-id="1">Reportar</a>
-                </li>
-
-                <li class="author-option d-none"><a class="dropdown-item text-danger" href="#">Eliminar</a></li>
-                <li class="admin-actions"><a class="dropdown-item text-danger" href="#">Bloquear usuario</a></li>
-              </ul>
-            </div>
-          </div>
-          <p>Este es un comentario de ejemplo.</p>
-        </div>
+        <div id="detalle-publicacion" class="shadow-sm"></div>
       </main>
     </div>
   </div>
 
-  <script> scr</script>
+  <!-- Scripts -->
+  <script src="/utils.js"></script>
+  <script src="/post_detail.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
