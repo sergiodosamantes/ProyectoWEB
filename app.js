@@ -17,18 +17,18 @@ app.get('/', (req, res) => {
 });
 
 // Rutas de usuarios
-/*
-const rutaUsuarios = require('./routes/usuarios');
+
+const rutaUsuarios = require('./app/controles/usuarios');
 app.use('/usuarios', rutaUsuarios);
 
- */
+
 
 // Rutas de publicaciones
-/*
-const rutaPublicaciones = require('./routes/publicaciones');
+
+const rutaPublicaciones = require('./app/controles/publicaciones');
 app.use('/publicaciones', rutaPublicaciones);
 
- */
+
 
 // Rutas para servir archivos HTML
 app.get("/login", (req, res) => {
