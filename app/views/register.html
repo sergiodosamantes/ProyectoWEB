@@ -59,7 +59,7 @@
       <div class="mb-3">
         <input type="password" class="form-control" id="password" name="password" 
           placeholder="Crea una contraseña"
-          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$"
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,}$"
           title="Debe contener al menos 6 caracteres, una mayúscula, una minúscula y un número"
           required>
       </div>
