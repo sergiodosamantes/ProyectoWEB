@@ -239,7 +239,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   async function votar(id, tipo) {
     const votoKey = `voto_pub_${id}`;
-    const votoPrevio = localStorage.getItem(votoKey);
+    let votoPrevio = localStorage.getItem(votoKey);
+  
+    // Validar que el voto previo sea válido
+    if (votoPrevio !== "up" && votoPrevio !== "down") {
+      votoPrevio = null; 
+    }
   
     if (votoPrevio === tipo) {
       alert("Ya votaste esto.");
@@ -250,7 +255,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const res = await fetch(`/publicaciones/${id}/votar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tipo, tipoAnterior: votoPrevio || null })
+        body: JSON.stringify({ tipo, tipoAnterior: votoPrevio })
       });
   
       const data = await res.json();
@@ -264,4 +269,3 @@ document.addEventListener("DOMContentLoaded", async () => {
       alert("Error al votar");
     }
   }
-  
