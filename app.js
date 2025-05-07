@@ -4,6 +4,11 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 const path = require("path");
+const connectDB = require('./database');
+
+connectDB(); // Conectar a la base de datos
+
+
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -19,7 +24,7 @@ app.get('/', (req, res) => {
 // Rutas de usuarios
 
 const rutaUsuarios = require('./app/controles/usuarios');
-app.use('/usuarios', rutaUsuarios);
+app.use('./app/controles/usuarios.js', rutaUsuarios);
 
 
 

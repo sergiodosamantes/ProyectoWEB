@@ -1,60 +1,56 @@
 const express = require('express');
 const router = express.Router();
+const Usuario = require('./Usuario'); 
 
-let usuarios = [];
-let usuarioLogueado = null; // Aquí simulamos la sesión
-
-// POST /usuarios - Registrar un nuevo usuario
-router.post('/', (req, res) => {
+// POST /usuarios - Registrar nuevo usuario
+router.post('/', async (req, res) => {
   const { nombre, apellido, email, password } = req.body;
 
   if (!nombre || !apellido || !email || !password) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
-  const nuevoUsuario = {
-    id: usuarios.length + 1,
-    nombre,
-    apellido,
-    email,
-    password,
-    rol: 'usuario' // Por defecto
-  };
-
-  usuarios.push(nuevoUsuario);
-  res.status(201).json({ mensaje: 'Usuario registrado', usuario: nuevoUsuario });
-});
-
-// POST /usuarios/login - Iniciar sesión
-router.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  const usuario = usuarios.find(u => u.email === email && u.password === password);
-
-  if (!usuario) {
-    return res.status(401).json({ mensaje: 'Credenciales inválidas' });
-  }
-
-  usuarioLogueado = usuario; // Guardamos al usuario en memoria
-
-  res.json({
-    mensaje: 'Inicio de sesión exitoso',
-    usuario: {
-      id: usuario.id,
-      nombre: usuario.nombre,
-      email: usuario.email,
-      rol: usuario.rol
+  try {
+    const nuevoUsuario = new Usuario({ nombre, apellido, email, password });
+    await nuevoUsuario.save();
+    res.status(201).json({ mensaje: 'Usuario registrado correctamente' });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ error: 'El correo ya está registrado' });
     }
-  });
+    res.status(500).json({ error: 'Error al registrar usuario' });
+  }
 });
 
-// DELETE /usuarios/logout - Cerrar sesión
-router.delete('/logout', (req, res) => {
-  if (usuarioLogueado) {
-    usuarioLogueado = null;
-    res.json({ mensaje: 'Sesión cerrada correctamente' });
-  } else {
-    res.status(400).json({ mensaje: 'No hay sesión activa' });
+// POST /usuarios/login - Iniciar sesión (autenticación simple)
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const usuario = await Usuario.findOne({ email, password });
+
+    if (!usuario) {
+      return res.status(401).json({ mensaje: 'Credenciales inválidas' });
+    }
+
+    res.json({
+      mensaje: 'Inicio de sesión exitoso',
+      usuario: {
+        id: usuario._id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        rol: usuario.rol
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al iniciar sesión' });
   }
+});
+
+// DELETE /usuarios/logout - Simulado
+router.delete('/logout', (req, res) => {
+  // Como no usamos sesiones ni JWT todavía, solo respondimos algo simple
+  res.json({ mensaje: 'Sesión cerrada (simulado)' });
 });
 
 module.exports = router;

@@ -47,7 +47,7 @@ router.get('/:id', (req, res) => {
   res.json(publicacion);
 });
 
-// PUT /publicaciones/:id - Editar publicación (solo si coincide el autorId)
+// PUT /publicaciones/:id - Editar publicación 
 router.put('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const { titulo, contenido, autorId } = req.body;
