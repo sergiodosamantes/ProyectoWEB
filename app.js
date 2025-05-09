@@ -8,7 +8,8 @@ const connectDB = require('./database');
 
 connectDB(); // Conectar a la base de datos
 
-
+// Firma para JWT u otros usos
+process.env.TOKEN_KEY = "ProyectoWeb2025";
 
 // Middleware
 app.use(express.json());
