@@ -131,7 +131,14 @@ router.delete('/:id', async (req, res) => {
   try {
     const pub = await Publicacion.findById(req.params.id);
     if (!pub) return res.status(404).json({ mensaje: 'No encontrada' });
-    if (pub.autorId.toString() !== autorId) return res.status(403).json({ mensaje: 'Sin permiso' });
+
+    const usuario = await Usuario.findById(autorId);
+    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+
+    // Permitir si es autor o admin
+    if (pub.autorId.toString() !== autorId && usuario.rol !== 'admin') {
+      return res.status(403).json({ mensaje: 'Sin permiso' });
+    }
 
     await Voto.deleteMany({ publicacionId: pub._id });
     await Comentario.deleteMany({ pubId: pub._id });
