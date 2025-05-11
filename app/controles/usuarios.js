@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Usuario = require('./Usuario'); 
+const jwt = require('jsonwebtoken');
+const Usuario = require('./Usuario');
+const bcrypt = require('bcryptjs');
 
 // POST /usuarios - Registrar nuevo usuario
 router.post('/', async (req, res) => {
@@ -11,7 +13,16 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const nuevoUsuario = new Usuario({ nombre, apellido, email, password });
+    // Encriptar la contraseña antes de guardar
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    const nuevoUsuario = new Usuario({
+      nombre,
+      apellido,
+      email,
+      password: hashedPassword
+    });
+
     await nuevoUsuario.save();
     res.status(201).json({ mensaje: 'Usuario registrado correctamente' });
   } catch (error) {
@@ -21,27 +32,35 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Error al registrar usuario' });
   }
 });
-
-// POST /usuarios/login - Iniciar sesión (autenticación simple)
+// POST /usuarios/login - 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const usuario = await Usuario.findOne({ email, password });
+    const usuario = await Usuario.findOne({ email });
 
     if (!usuario) {
       return res.status(401).json({ mensaje: 'Credenciales inválidas' });
     }
 
-    res.json({
-      mensaje: 'Inicio de sesión exitoso',
-      usuario: {
+    // Comparar contraseña en texto plano con la encriptada
+    const esValida = bcrypt.compareSync(password, usuario.password);
+
+    if (!esValida) {
+      return res.status(401).json({ mensaje: 'Credenciales inválidas' });
+    }
+
+    const token = jwt.sign(
+      {
         id: usuario._id,
         nombre: usuario.nombre,
-        email: usuario.email,
         rol: usuario.rol
-      }
-    });
+      },
+      process.env.TOKEN_KEY,
+      { expiresIn: '2h' }
+    );
+
+    res.json({ mensaje: 'Inicio de sesión exitoso', token });
   } catch (error) {
     res.status(500).json({ error: 'Error al iniciar sesión' });
   }
@@ -49,7 +68,6 @@ router.post('/login', async (req, res) => {
 
 // DELETE /usuarios/logout - Simulado
 router.delete('/logout', (req, res) => {
-  // Como no usamos sesiones ni JWT todavía, solo respondimos algo simple
   res.json({ mensaje: 'Sesión cerrada (simulado)' });
 });
 

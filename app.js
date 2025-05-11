@@ -5,6 +5,7 @@ const app = express();
 const PORT = 3000;
 const path = require("path");
 const connectDB = require('./database');
+const viewsPath = path.join(__dirname, 'app', 'views');
 
 connectDB(); // Conectar a la base de datos
 
