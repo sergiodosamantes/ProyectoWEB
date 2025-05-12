@@ -30,6 +30,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           <small>ID: ${pub._id}</small>
         </div>
         <p class="mb-1">${pub.contenido}</p>
+        ${pub.archivoBase64 && pub.archivoTipo?.startsWith("image/")
+          ? `<img src="data:${pub.archivoTipo};base64,${pub.archivoBase64}" style="max-width:100%;border-radius:10px;margin-top:10px;" />`
+          : ""
+        }
         <div>
           <button class="btn btn-sm btn-outline-success me-1">+ Votar</button>
           <button class="btn btn-sm btn-outline-danger me-1">- Votar</button>

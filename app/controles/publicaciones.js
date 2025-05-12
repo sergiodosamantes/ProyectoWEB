@@ -10,6 +10,8 @@ const publicacionSchema = new mongoose.Schema({
   autorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
   etiquetas: [String],
   fecha: { type: Date, default: Date.now },
+  archivoBase64: { type: String }, 
+  archivoTipo: { type: String },
   resuelto: { type: Boolean, default: false }
 });
 const Publicacion = mongoose.model('Publicacion', publicacionSchema);
@@ -43,14 +45,22 @@ const VotoComentario = mongoose.model('VotoComentario', votoComentarioSchema);
 
 // Crear nueva publicación
 router.post('/', async (req, res) => {
-  const { titulo, contenido, autorId, etiquetas = [] } = req.body;
+  const { titulo, contenido, autorId, etiquetas = [], archivoBase64, archivoTipo } = req.body;
 
   if (!titulo || !contenido || !autorId) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
   try {
-    const nueva = new Publicacion({ titulo, contenido, autorId, etiquetas });
+    const nueva = new Publicacion({
+      titulo,
+      contenido,
+      autorId,
+      etiquetas,
+      archivoBase64,
+      archivoTipo
+    });
+
     await nueva.save();
     res.status(201).json({ mensaje: 'Publicación creada', publicacion: nueva });
   } catch (err) {

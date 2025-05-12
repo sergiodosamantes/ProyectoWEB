@@ -59,6 +59,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
 
       <p id="contenido-publicacion">${pub.contenido}</p>
+      ${pub.archivoBase64 && pub.archivoTipo?.startsWith("image/")
+        ? `<img src="data:${pub.archivoTipo};base64,${pub.archivoBase64}" style="max-width:100%;border-radius:10px;margin-top:15px;" />`
+        : ""
+      }
       <div class="mt-3">
         ${(pub.etiquetas || []).map(tag => `<span class="tag">${tag}</span>`).join(' ')}
       </div>
