@@ -16,6 +16,7 @@ const Publicacion = mongoose.model('Publicacion', publicacionSchema);
 // Esquema para Comentarios
 const comentarioSchema = new mongoose.Schema({
   pubId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Publicacion' },
+  parentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comentario', default: null }, // <- AÑADE ESTO
   contenido: { type: String, required: true },
   autorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
   autorNombre: { type: String },
@@ -195,7 +196,7 @@ router.get('/:id/comentarios', async (req, res) => {
 
 // Agregar comentario
 router.post('/:id/comentarios', async (req, res) => {
-  const { contenido, autorId, autorNombre } = req.body;
+  const { contenido, autorId, autorNombre, parentId = null } = req.body;
 
   if (!contenido || !autorId) {
     return res.status(400).json({ error: 'Faltan campos obligatorios' });
@@ -206,7 +207,8 @@ router.post('/:id/comentarios', async (req, res) => {
       pubId: req.params.id,
       contenido,
       autorId,
-      autorNombre
+      autorNombre,
+      parentId
     });
     await nuevoComentario.save();
     res.status(201).json({ mensaje: 'Comentario agregado', comentario: nuevoComentario });
@@ -214,7 +216,6 @@ router.post('/:id/comentarios', async (req, res) => {
     res.status(500).json({ error: 'Error al guardar el comentario' });
   }
 });
-
 // Obtener votos de un comentario
 router.get('/comentarios/:id/voto/:usuarioId', async (req, res) => {
   try {
