@@ -39,12 +39,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const esAutor = usuario.id === pub.autorId;
     const esAdmin = usuario.rol?.toLowerCase().includes("admin");
-    console.log("🧪 Comparación de autor:");
-    console.log("usuario.id →", usuario.id, typeof usuario.id);
-    console.log("pub.autorId →", pub.autorId, typeof pub.autorId);
-    console.log("¿Es autor?", esAutor);
-
-
     contenedor.innerHTML = `
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>

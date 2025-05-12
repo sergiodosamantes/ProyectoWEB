@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const Usuario = require('./Usuario');
 
 // Esquema para Publicaciones
 const publicacionSchema = new mongoose.Schema({
