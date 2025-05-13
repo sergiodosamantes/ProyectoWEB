@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Ruta raíz de prueba
 app.get('/', (req, res) => {
-  res.send('¡Bienvenido al backend!');
+  res.sendFile(path.join(__dirname, "app/views/login.html"));
 });
 
 // Rutas de usuarios
