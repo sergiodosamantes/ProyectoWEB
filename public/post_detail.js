@@ -278,9 +278,16 @@ async function cargarComentarios(pubId, usuario) {
                 <i class="bi bi-three-dots-vertical"></i>
               </button>
               <ul class="dropdown-menu">
-                ${esAutor ? `<li><a class="dropdown-item btn-edit-comentario" data-id="${com._id}">Editar</a></li>` : ""}
-                ${esAutor ? `<li><a class="dropdown-item btn-delete-comentario text-danger" data-id="${com._id}">Eliminar</a></li>` : ""}
-              </ul>
+            ${esAutor
+              ? `
+                <li><a class="dropdown-item btn-edit-comentario" data-id="${com._id}">Editar</a></li>
+                <li><a class="dropdown-item btn-delete-comentario text-danger" data-id="${com._id}">Eliminar</a></li>
+              `
+              : `
+                <li><a class="dropdown-item text-danger" href="#">Reportar</a></li>
+              `
+            }
+          </ul>
             </div>
           </div>
           <p class="mt-2" id="contenido-${com._id}">${com.contenido}</p>
