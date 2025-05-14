@@ -1,4 +1,6 @@
-function obtenerUsuarioDesdeToken() {
+// Cambiar nombre al archivo a post y por que hay mas funciones que solo borrar
+
+function obtenerUsuarioDesdeToken() { // despues cambiar a algo mas corto
   const token = sessionStorage.getItem("token");
   if (!token) return null;
 
@@ -33,27 +35,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pub = await res.json();
 
     if (!res.ok || !pub.titulo) {
-      contenedor.innerHTML = "<p>No se pudo cargar la publicación.</p>";
+      contenedor.innerHTML = "<p>No se pudo cargar la publicación.</p>"; // aqui es texto y en otro es alerta
       return;
     }
 
     const esAutor = usuario.id === pub.autorId;
-    const esAdmin = usuario.rol?.toLowerCase().includes("admin");
+    const esAdmin = usuario.rol?.toLowerCase().includes("admin"); // si es admin puede borar
     contenedor.innerHTML = `
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h3>${pub.titulo}</h3>
-          <small class="text-muted">Publicado por <a href="/perfil?id=${pub.autorId}">${pub.autorId}</a> - ${new Date(pub.fecha).toLocaleString()}</small>
+          <small class="text-muted">Publicado por <a href="/perfil?id=${pub.nombre}">${pub.autorId}</a> - ${new Date(pub.fecha).toLocaleString()}</small>
         </div>
         <div class="dropdown">
           <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
             <i class="bi bi-three-dots"></i>
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Reportar</a></li>
-            ${esAutor ? `<li><a class="dropdown-item" href="#" id="btn-editar">Editar publicación</a></li>` : ""}
-            ${esAutor ? `<li><a class="dropdown-item text-danger" href="#" id="btn-eliminar">Eliminar publicación</a></li>` : ""}
-            ${esAdmin ? `<li><a class="dropdown-item text-danger" href="#">Bloquear usuario</a></li>` : ""}
+            ${(!esAutor || esAdmin) ? `<li><a class="dropdown-item text-warning" href="#" id="btn-reportar">Reportar</a></li>` : ""}
+            ${(esAutor || esAdmin) ? `<li><a class="dropdown-item" href="#" id="btn-editar">Editar publicación</a></li>` : ""}
+            ${(esAutor || esAdmin) ? `<li><a class="dropdown-item text-danger" href="#" id="btn-eliminar">Eliminar publicación</a></li>` : ""}
           </ul>
         </div>
       </div>
@@ -95,8 +96,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `;
 
-    // Agregar modal de edición si es autor
-    if (esAutor) {
+    // Agregar modal de edición si es autor o administrador
+    if (esAutor || esAdmin) {
       const modalEditar = document.createElement("div");
       modalEditar.innerHTML = `
         <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
@@ -149,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const resuelto = document.getElementById("editar-resuelto").checked;
         const etiquetas = etiquetasTexto ? etiquetasTexto.split(",").map(t => t.trim()) : [];
 
-        if (!titulo || !contenido) return alert("Título y contenido obligatorios");
+        if (!titulo || !contenido) return alert("Título y contenido obligatorios"); // alerta de falto elemento
 
         const res = await fetch(`/publicaciones/${pub._id}`, {
           method: "PUT",
@@ -185,6 +186,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelector(".vote-count-up").textContent = votos.votosPositivos;
     document.querySelector(".vote-count-down").textContent = votos.votosNegativos;
 
+    // dcargar botones
     const votoRes = await fetch(`/publicaciones/${pubId}/voto/${usuario.id}`);
     const voto = await votoRes.json();
     if (voto?.tipo === "up") document.querySelector(".btn-vote.up").classList.add("active");
@@ -213,7 +215,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error("Error general:", err);
-    contenedor.innerHTML = "<p>Error al conectar con el servidor.</p>";
+    contenedor.innerHTML = "<p>Error al conectar con el servidor.</p>"; // eror y no como alerta
   }
 });
 
@@ -261,6 +263,7 @@ async function cargarComentarios(pubId, usuario) {
       }
     }
 
+    // estilo de redit
     const renderComentarios = (lista, nivel = 0) => {
       const fragmento = document.createDocumentFragment();
 
