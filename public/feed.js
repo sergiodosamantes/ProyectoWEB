@@ -35,11 +35,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           : ""
         }
         <div>
-          <button class="btn btn-sm btn-outline-success me-1">+ Votar</button>
-          <button class="btn btn-sm btn-outline-danger me-1">- Votar</button>
-          <button class="btn btn-sm btn-outline-secondary" onclick="verDetalle('${pub._id}')">Ver más</button>
+          <button class="btn btn-sm btn-outline-success me-1">
+            + Votar<span>${pub.votosPositivos || 0}</span>
+          </button>
+          <button class="btn btn-sm btn-outline-danger me-1">
+            - Votar<span>${pub.votosNegativos || 0}</span>
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" onclick="verDetalle('${pub._id}')">
+          Ver más
+          </button>
         </div>
-      </div>
     `).join('');
   } catch (err) {
     console.error("Error al cargar publicaciones:", err);

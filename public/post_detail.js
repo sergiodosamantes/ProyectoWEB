@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <i class="bi bi-three-dots"></i>
           </button>
           <ul class="dropdown-menu">
-            ${(!esAutor || esAdmin) ? `<li><a class="dropdown-item text-warning" href="#" id="btn-reportar">Reportar</a></li>` : ""}
+            ${(!esAutor) ? `<li><a class="dropdown-item text-warning" href="#" id="btn-reportar">Reportar</a></li>` : ""}
             ${(esAutor || esAdmin) ? `<li><a class="dropdown-item" href="#" id="btn-editar">Editar publicación</a></li>` : ""}
             ${(esAutor || esAdmin) ? `<li><a class="dropdown-item text-danger" href="#" id="btn-eliminar">Eliminar publicación</a></li>` : ""}
           </ul>
