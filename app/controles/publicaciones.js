@@ -5,25 +5,59 @@ const Usuario = require('./Usuario');
 
 // Esquema para Publicaciones
 const publicacionSchema = new mongoose.Schema({
-  titulo: { type: String, required: true },
-  contenido: { type: String, required: true },
-  autorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
+  titulo: { 
+    type: String, 
+    required: true 
+  },
+  contenido: { 
+    type: String, 
+    required: true 
+  },
+  autorId: { 
+    type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' 
+  },
   etiquetas: [String],
-  fecha: { type: Date, default: Date.now },
-  archivoBase64: { type: String }, 
-  archivoTipo: { type: String },
-  resuelto: { type: Boolean, default: false }
+  fecha: { 
+    type: Date, 
+    default: Date.now 
+  },
+  archivoBase64: { 
+    type: String 
+  }, 
+  archivoTipo: { 
+    type: String 
+  },
+  resuelto: { 
+    type: Boolean, 
+    default: false 
+  }
 });
 const Publicacion = mongoose.model('Publicacion', publicacionSchema);
 
 // Esquema para Comentarios
 const comentarioSchema = new mongoose.Schema({
-  pubId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Publicacion' },
-  parentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comentario', default: null }, // <- AÑADE ESTO
-  contenido: { type: String, required: true },
-  autorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
-  autorNombre: { type: String },
-  fecha: { type: Date, default: Date.now }
+  pubId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    required: true, 
+    ref: 'Publicacion' 
+  },
+  parentId: { type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Comentario', default: null 
+  }, // <- AÑADE ESTO
+  contenido: { 
+    type: String, 
+    required: true 
+  },
+  autorId: { type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Usuario' 
+  },
+  autorNombre: { 
+    type: String 
+  },
+  fecha: { 
+    type: Date, 
+    default: Date.now 
+  }
 });
 const Comentario = mongoose.model('Comentario', comentarioSchema);
 
