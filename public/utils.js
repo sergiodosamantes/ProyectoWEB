@@ -1,5 +1,17 @@
 "use strict";
+function obtenerUsuarioDesdeToken() { 
+  const token = sessionStorage.getItem("token");
+  if (!token) return null;
 
+  try {
+    const payload = token.split('.')[1];
+    const decoded = JSON.parse(atob(payload));
+    return decoded;
+  } catch (e) {
+    console.error("Token inválido:", e);
+    return null;
+  }
+}
 // Redirección a la página de login
 function goLogin() {
     window.location.href = "/login";

@@ -34,7 +34,10 @@ app.use('/usuarios', rutaUsuarios);
 const rutaPublicaciones = require('./app/controles/publicaciones');
 app.use('/publicaciones', rutaPublicaciones);
 
+// Ruta etiquetas 
 
+const rutaEtiquetas = require('./app/controles/etiquetas');
+app.use('/etiquetas', rutaEtiquetas);
 
 // Rutas para servir archivos HTML
 app.get("/login", (req, res) => {
@@ -54,6 +57,12 @@ app.get('/register', (req, res) => {
 });
 app.get('/perfil', (req, res) => {
   res.sendFile(path.join(viewsPath, 'profile.html'));
+});
+app.get('/admin_tags', (req, res) => {
+  res.sendFile(path.join(viewsPath, 'admin_tags.html'));
+});
+app.get('/admin_reports', (req, res) => {
+  res.sendFile(path.join(viewsPath, 'admin_reports.html'));
 });
 
 // Ruta raíz de prueba

@@ -1,6 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form");
+  // Traer las etiquetas desde el backend para mostrarlas como opciones 
+  fetch('/etiquetas')
+  .then(res => res.json())
+  .then(etiquetas => {
+    const container = document.getElementById("tags-container");
+    // Checkbox para cada etiqeuta 
+    etiquetas.forEach(et => {
+      const label = document.createElement("label");
+      label.className = "form-check form-check-inline";
 
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.className = "form-check-input";
+      input.name = "etiquetas";
+      input.value = et.nombre;
+      input.addEventListener("change", limitarSeleccion);
+
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(" " + et.nombre));
+      container.appendChild(label);
+    });
+  });
+
+// Solo permitir usar 2 etiquetas 
+function limitarSeleccion() {
+  const seleccionadas = document.querySelectorAll('input[name="etiquetas"]:checked');
+  if (seleccionadas.length > 2) {
+    this.checked = false;
+    alert("Solo puedes seleccionar 2 etiquetas.");
+  }
+}
+  const form = document.querySelector("form");
+  // decodificar el token para traer los datos del user 
   function obtenerUsuarioDesdeToken() {
     const token = sessionStorage.getItem("token");
     if (!token) return null;
@@ -22,10 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "/login";
       return;
     }
-
+  // Obtenemr los valores del formulario
     const titulo = document.getElementById("title").value.trim();
     const contenido = document.getElementById("content").value.trim();
-    const etiquetasTexto = document.getElementById("tags").value.trim();
+    const etiquetas = Array.from(document.querySelectorAll('input[name="etiquetas"]:checked')).map(e => e.value);
     const archivo = document.getElementById("attachment").files[0];
 
     if (!titulo || !contenido) {
@@ -43,23 +74,24 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onload = async () => {
         const base64String = reader.result.split(',')[1];
         const tipoArchivo = archivo.type;
-
+        // mandar la publi al backend 
         await enviarPublicacion({
           titulo,
           contenido,
           autorId: usuario.id,
-          etiquetas: etiquetasTexto ? etiquetasTexto.split(",").map(e => e.trim()) : [],
+          etiquetas,
           archivoBase64: base64String,
           archivoTipo: tipoArchivo,
           resuelto: false
         });
       };
+      // Si no hay archivo
     } else {
       await enviarPublicacion({
         titulo,
         contenido,
         autorId: usuario.id,
-        etiquetas: etiquetasTexto ? etiquetasTexto.split(",").map(e => e.trim()) : [],
+        etiquetas,
         archivoBase64: null,
         archivoTipo: null,
         resuelto: false
