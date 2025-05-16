@@ -27,7 +27,7 @@ const publicacionSchema = new mongoose.Schema({
   archivoTipo: { 
     type: String 
   },
-  resuelto: { 
+  reportado: { 
     type: Boolean, 
     default: false 
   }
@@ -223,7 +223,7 @@ router.put('/:id', async (req, res) => {
     pub.titulo = titulo ?? pub.titulo;
     pub.contenido = contenido ?? pub.contenido;
     pub.etiquetas = etiquetas ?? pub.etiquetas;
-    if (resuelto !== undefined) pub.resuelto = resuelto;
+    if (resuelto !== undefined) pub.reportado = resuelto;
 
     await pub.save();
     res.json({ mensaje: 'Actualizada', publicacion: pub });
@@ -433,6 +433,11 @@ router.post('/reportes', async (req, res) => {
   try {
     const nuevo = new Reporte({ refId, tipo, comentarios, autorId, autorNombre });
     await nuevo.save();
+
+    // Si es un reporte sobre una publicación, marcarla como reportada
+    if (tipo === "Publicacion")
+      await Publicacion.findByIdAndUpdate(refId, { reportado: true });
+
     res.status(201).json({ mensaje: 'Reporte creado correctamente', reporte: nuevo });
   } catch (err) {
     console.error(err);
@@ -451,32 +456,56 @@ router.get('/reportes', async (req, res) => {
 
     const reportes = await Reporte.find(filtro).sort({ fecha: -1 });
     res.json(reportes);
-  } catch (err) {
+  }
+  catch (err) {
     res.status(500).json({ error: 'Error al obtener reportes' });
   }
 });
 
-// Eliminar reporte de la lista de admin
-router.delete('/reportes/:id', async (req, res) => {
-  const { usuarioId } = req.body;
-
+// Marcar todos los reportes de una publicación como resueltos
+router.put('/reportes/:id', async (req, res) => {
   try {
-    const reporte = await Reporte.findById(req.params.id);
-    if (!reporte) return res.status(404).json({ mensaje: 'Reporte no encontrado' });
+    const { id } = req.params;
+    const { resuelto } = req.body;
 
-    const usuario = await Usuario.findById(usuarioId);
-    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    await Reporte.updateMany({ refId: id }, { resuelto: !!resuelto });
 
-    // Permiso solo para autor
-    if (usuario.rol !== 'admin')
-      return res.status(403).json({ mensaje: 'Sin permiso para eliminar este reporte' });
+    // Si se resolvieron todos, desmarcar la publicación como reportada
+    if (resuelto) {
+      await Publicacion.findByIdAndUpdate(id, { reportado: false });
+    }
 
-    await reporte.deleteOne();
-    res.json({ mensaje: 'Reporte eliminado' });
+    res.json({ mensaje: 'Reportes actualizados como resueltos' });
   } catch (err) {
-    res.status(500).json({ mensaje: 'Error al eliminar reporte' });
+    console.error(err);
+    res.status(500).json({ error: 'Error al actualizar los reportes' });
   }
 });
+
+
+// Obtener reportes de una publicación específica
+router.get('/reportes/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const reportes = await Reporte.find({ refId: id });
+    res.json(reportes);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al obtener reportes" });
+  }
+});
+
+// Obtener todas las publicaciones reportadas
+router.get('/reportadas', async (req, res) => {
+  try {
+    const publicaciones = await Publicacion.find({ reportado: true });
+    res.json(publicaciones);
+  } catch (err) {
+    console.error("Error en GET /reportadas:", err); // Agrega esto
+    res.status(500).json({ error: 'Error al obtener publicaciones reportadas' });
+  }
+});
+
 
 
 module.exports = router;
