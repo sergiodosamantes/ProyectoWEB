@@ -1,5 +1,7 @@
 "use strict";
-function obtenerUsuarioDesdeToken() { 
+
+// decodificar usuario desde token
+function obtenerUsuarioToken() {
   const token = sessionStorage.getItem("token");
   if (!token) return null;
 
@@ -44,13 +46,13 @@ function goPerfil() {
 // Guarda los datos del usuario en localStorage (como JSON)
 function guardarUsuario(usuario) {
     localStorage.setItem("usuario", JSON.stringify(usuario));
-  }  
+  }
   // Obtiene y devuelve los datos del usuario almacenados en localStorage
 
   function obtenerUsuario() {
     return JSON.parse(localStorage.getItem("usuario"));
   }
-  
+
   function cerrarSesion() {
     localStorage.removeItem("usuario");
     window.location.href = "/login";

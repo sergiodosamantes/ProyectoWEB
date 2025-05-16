@@ -102,6 +102,7 @@ const reporteSchema = new mongoose.Schema({
 
 module.exports = mongoose.model('Reporte', reporteSchema);
 
+
 // Esquema para Votos de Publicaciones
 const votoSchema = new mongoose.Schema({
   publicacionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Publicacion', required: true },
@@ -399,6 +400,24 @@ router.get('/comentarios/:id/votos', async (req, res) => {
     res.json({ votosPositivos, votosNegativos });
   } catch (err) {
     res.status(500).json({ error: 'Error al contar votos del comentario' });
+  }
+});
+
+// crear reporte
+router.post("/", async (req, res) => {
+  const { refId, tipo, comentarios, autorId, autorNombre } = req.body;
+
+  if (!refId || !tipo || !comentarios || !autorId || !autorNombre) {
+    return res.status(400).json({ error: "Faltan campos obligatorios" });
+  }
+
+  try {
+    const nuevo = new Reporte({ refId, tipo, comentarios, autorId, autorNombre });
+    await nuevo.save();
+    res.status(201).json({ mensaje: "Reporte creado correctamente", reporte: nuevo });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al crear el reporte" });
   }
 });
 

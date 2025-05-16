@@ -215,13 +215,12 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Enviar el reporte al backend
 async function enviarReporte() {
   const id = document.getElementById("reporte-id").value;
   const tipo = document.getElementById("reporte-tipo").value;
   const mensaje = document.getElementById("mensaje-reporte").value.trim();
-  const token = localStorage.getItem("token");
-  const usuario = getUsuario();
+  const token = sessionStorage.getItem("token");
+  const usuario = obtenerUsuarioToken(); // desde utils.js
 
   if (!mensaje) {
     alert("El mensaje no puede estar vacío.");
@@ -229,7 +228,7 @@ async function enviarReporte() {
   }
 
   try {
-    const res = await fetch("/reportes", {
+    const res = await fetch("/publicaciones", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -244,13 +243,21 @@ async function enviarReporte() {
       })
     });
 
-    const data = await res.json();
+    const contentType = res.headers.get("content-type");
 
     if (!res.ok) {
-      alert(data.error || "Error al enviar el reporte");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        alert(data.error || "Error al enviar el reporte.");
+      } else {
+        const text = await res.text(); // Puede ser HTML
+        console.error("Respuesta no JSON del servidor:", text);
+        alert("Error inesperado del servidor (no es JSON).");
+      }
       return;
     }
 
+    // Todo bien
     alert("Reporte enviado correctamente.");
     bootstrap.Modal.getInstance(document.getElementById("modalReporte")).hide();
   } catch (err) {
@@ -258,3 +265,5 @@ async function enviarReporte() {
     alert("Hubo un problema al enviar el reporte.");
   }
 }
+
+

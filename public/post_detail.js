@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const usuario = obtenerUsuarioDesdeToken();
+  const usuario = obtenerUsuarioToken();
   if (!usuario) {
     alert("Debes iniciar sesión.");
     window.location.href = "/login";

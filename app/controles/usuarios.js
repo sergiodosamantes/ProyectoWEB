@@ -66,6 +66,20 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// GET /usuarios/:id - Obtener un usuario por ID
+router.get('/:id', async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.params.id).select('-password');
+    // Excluye el password por seguridad del usuario
+    if (!usuario)
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json(usuario);
+  }
+  catch (error) {
+    res.status(500).json({ error: 'Error al obtener el usuario' });
+  }
+});
+
 // DELETE /usuarios/logout - Simulado
 router.delete('/logout', (req, res) => {
   res.json({ mensaje: 'Sesión cerrada (simulado)' });
