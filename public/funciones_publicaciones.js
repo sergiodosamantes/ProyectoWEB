@@ -228,7 +228,7 @@ async function enviarReporte() {
   }
 
   try {
-    const res = await fetch("/publicaciones", {
+    const res = await fetch("/publicaciones/reportes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -249,7 +249,8 @@ async function enviarReporte() {
       if (contentType && contentType.includes("application/json")) {
         const data = await res.json();
         alert(data.error || "Error al enviar el reporte.");
-      } else {
+      }
+      else {
         const text = await res.text(); // Puede ser HTML
         console.error("Respuesta no JSON del servidor:", text);
         alert("Error inesperado del servidor (no es JSON).");
@@ -257,13 +258,11 @@ async function enviarReporte() {
       return;
     }
 
-    // Todo bien
     alert("Reporte enviado correctamente.");
     bootstrap.Modal.getInstance(document.getElementById("modalReporte")).hide();
-  } catch (err) {
+  }
+  catch (err) {
     console.error("Error al enviar reporte:", err);
     alert("Hubo un problema al enviar el reporte.");
   }
 }
-
-

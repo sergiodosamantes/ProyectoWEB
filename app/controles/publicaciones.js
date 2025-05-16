@@ -100,22 +100,41 @@ const reporteSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Reporte', reporteSchema);
+const Reporte = mongoose.model('Reporte', reporteSchema);
 
 
 // Esquema para Votos de Publicaciones
 const votoSchema = new mongoose.Schema({
-  publicacionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Publicacion', required: true },
-  usuarioId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
-  tipo: { type: String, enum: ['up', 'down'], required: true }
+  publicacionId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Publicacion', 
+    required: true },
+  usuarioId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', 
+    required: true },
+  tipo: { 
+    type: String, enum: ['up', 'down'], required: true 
+
+  }
 });
 const Voto = mongoose.model('Voto', votoSchema);
 
 //  Esquema para Votos de Comentarios
 const votoComentarioSchema = new mongoose.Schema({
-  comentarioId: { type: mongoose.Schema.Types.ObjectId, ref: 'Comentario', required: true },
-  usuarioId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
-  tipo: { type: String, enum: ['up', 'down'], required: true }
+  comentarioId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Comentario', 
+    required: true 
+  },
+  usuarioId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Usuario', 
+    required: true 
+  },
+  tipo: { 
+    type: String, 
+    enum: ['up', 'down'], 
+    required: true 
+  }
 });
 const VotoComentario = mongoose.model('VotoComentario', votoComentarioSchema);
 
@@ -403,22 +422,61 @@ router.get('/comentarios/:id/votos', async (req, res) => {
   }
 });
 
-// crear reporte
-router.post("/", async (req, res) => {
+// Crear reporte cualquier usuario
+router.post('/reportes', async (req, res) => {
   const { refId, tipo, comentarios, autorId, autorNombre } = req.body;
 
   if (!refId || !tipo || !comentarios || !autorId || !autorNombre) {
-    return res.status(400).json({ error: "Faltan campos obligatorios" });
+    return res.status(400).json({ error: 'Faltan campos obligatorios' });
   }
 
   try {
     const nuevo = new Reporte({ refId, tipo, comentarios, autorId, autorNombre });
     await nuevo.save();
-    res.status(201).json({ mensaje: "Reporte creado correctamente", reporte: nuevo });
+    res.status(201).json({ mensaje: 'Reporte creado correctamente', reporte: nuevo });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Error al crear el reporte" });
+    res.status(500).json({ error: 'Error al crear el reporte' });
   }
 });
+
+// Obtener todos los reportes para la pagina de admin
+router.get('/reportes', async (req, res) => {
+  const { tipo, refId } = req.query;
+
+  try {
+    const filtro = {};
+    if (tipo) filtro.tipo = tipo;
+    if (refId) filtro.refId = refId;
+
+    const reportes = await Reporte.find(filtro).sort({ fecha: -1 });
+    res.json(reportes);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener reportes' });
+  }
+});
+
+// Eliminar reporte de la lista de admin
+router.delete('/reportes/:id', async (req, res) => {
+  const { usuarioId } = req.body;
+
+  try {
+    const reporte = await Reporte.findById(req.params.id);
+    if (!reporte) return res.status(404).json({ mensaje: 'Reporte no encontrado' });
+
+    const usuario = await Usuario.findById(usuarioId);
+    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+
+    // Permiso solo para autor
+    if (usuario.rol !== 'admin')
+      return res.status(403).json({ mensaje: 'Sin permiso para eliminar este reporte' });
+
+    await reporte.deleteOne();
+    res.json({ mensaje: 'Reporte eliminado' });
+  } catch (err) {
+    res.status(500).json({ mensaje: 'Error al eliminar reporte' });
+  }
+});
+
 
 module.exports = router;

@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ec5efc6-2ea2-472e-b634-b5acc29f71a7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/public/admin_report.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/controles/publicaciones.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/controles/publicaciones.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin_reports.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin_reports.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/post_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/post_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/post_detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/post_detail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/funciones_publicaciones.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/funciones_publicaciones.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,9 +26,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2x8e7rJN8DdBHu6POs8EaNfkrOc" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -39,6 +38,7 @@
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
     "JavaScript Debug.admin_reports.html.executor": "Run",
+    "JavaScript Debug.admin_tags.html.executor": "Run",
     "JavaScript Debug.feed.html.executor": "Run",
     "JavaScript Debug.jf.html.executor": "Run",
     "JavaScript Debug.post_detail.html.executor": "Run",
@@ -59,11 +59,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Node.js.app.js">
+  <component name="RunManager" selected="JavaScript Debug.admin_reports.html">
     <configuration name="admin_reports.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/ProyectoWEB/app/views/admin_reports.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
-    <configuration name="feed.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/ProyectoWEB/app/views/feed.html" useBuiltInWebServerPort="true">
+    <configuration name="admin_tags.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/ProyectoWEB/app/views/admin_tags.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
     <configuration name="jf.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/ProyectoWEB/app/views/jf.html" useBuiltInWebServerPort="true">
@@ -77,11 +77,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Node.js.app.js" />
         <item itemvalue="JavaScript Debug.admin_reports.html" />
+        <item itemvalue="JavaScript Debug.admin_tags.html" />
+        <item itemvalue="Node.js.app.js" />
         <item itemvalue="JavaScript Debug.post_detail.html" />
         <item itemvalue="JavaScript Debug.jf.html" />
-        <item itemvalue="JavaScript Debug.feed.html" />
       </list>
     </recent_temporary>
   </component>
@@ -100,6 +100,8 @@
       <option name="presentableId" value="Default" />
       <updated>1747323963474</updated>
       <workItem from="1747323964643" duration="11874000" />
+      <workItem from="1747353297762" duration="6661000" />
+      <workItem from="1747366158531" duration="903000" />
     </task>
     <servers />
   </component>
@@ -110,16 +112,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/post_detail.js</url>
-          <line>6</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/public/utils.js</url>
-          <line>52</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/public/funciones_publicaciones.js</url>
+          <line>43</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
