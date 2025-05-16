@@ -61,6 +61,47 @@ const comentarioSchema = new mongoose.Schema({
 });
 const Comentario = mongoose.model('Comentario', comentarioSchema);
 
+// reportar usuarios
+const reporteSchema = new mongoose.Schema({
+  refId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    refPath: 'tipo'
+  },
+  tipo: {
+    type: String,
+    required: true,
+    enum: ['Publicacion', 'Comentario']
+  },
+  comentarios: {
+    type: [String],
+    required: true,
+    validate: {
+      validator: (arr) => arr.length > 0,
+      message: 'Debe haber al menos un comentario en el reporte.'
+    }
+  },
+  autorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario',
+    required: true
+  },
+  autorNombre: {
+    type: String,
+    required: true
+  },
+  fecha: {
+    type: Date,
+    default: Date.now
+  },
+  resuelto: {
+    type: Boolean,
+    default: false
+  }
+});
+
+module.exports = mongoose.model('Reporte', reporteSchema);
+
 // Esquema para Votos de Publicaciones
 const votoSchema = new mongoose.Schema({
   publicacionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Publicacion', required: true },

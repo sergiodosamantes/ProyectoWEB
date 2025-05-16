@@ -4,7 +4,7 @@ function mostrarError(msg) {
   contenedor.innerHTML = `<p class="text-danger">${msg}</p>`;
 }
 
-//Cargar una publicación específica
+// Cargar una publicación específica
 async function cargarPublicacion(id) {
   const res = await fetch(`/publicaciones/${id}`);
   const pub = await res.json();
@@ -29,7 +29,7 @@ function mostrarDetalle(pub, usuario) {
           <i class="bi bi-three-dots"></i>
         </button>
         <ul class="dropdown-menu">
-          ${!esAutor ? `<li><a class="dropdown-item text-warning" href="#" id="btn-reportar">Reportar</a></li>` : ""}
+          ${!esAutor ? `<li><a class="dropdown-item text-warning btn-reportar" href="#" data-id="${pub._id}" data-tipo="Publicacion">Reportar</a></li>` : ""}
           ${(esAutor || esAdmin) ? `<li><a class="dropdown-item" href="#" id="btn-editar">Editar publicación</a></li>` : ""}
           ${(esAutor || esAdmin) ? `<li><a class="dropdown-item text-danger" href="#" id="btn-eliminar">Eliminar publicación</a></li>` : ""}
         </ul>
@@ -61,8 +61,7 @@ function mostrarDetalle(pub, usuario) {
   `;
 }
 
-// Modal de edición de publicaciones (solopara el autor)
-
+// Modal de edición de publicaciones
 async function prepararModalEdicion(pub, usuario) {
   const modalEditar = document.createElement("div");
   modalEditar.innerHTML = `
@@ -103,12 +102,11 @@ async function prepararModalEdicion(pub, usuario) {
     </div>
   `;
   document.body.appendChild(modalEditar);
-  // Trae las etiquetas desde la base de datos
+
   const res = await fetch('/etiquetas');
   const etiquetasDisponibles = await res.json();
   const container = document.getElementById("editar-tags-container");
   container.innerHTML = '';
-  // Generamos los checkbox de etiquetas y marcamos las ya asignadas
   etiquetasDisponibles.forEach(et => {
     const label = document.createElement("label");
     label.className = "form-check form-check-inline";
@@ -141,7 +139,7 @@ async function prepararModalEdicion(pub, usuario) {
     const modal = new bootstrap.Modal(document.getElementById("editarModal"));
     modal.show();
   });
-  // Guardar los cambios 
+
   document.getElementById("btn-guardar-edicion").addEventListener("click", async () => {
     const titulo = document.getElementById("editar-titulo").value.trim();
     const contenido = document.getElementById("editar-contenido").value.trim();
@@ -161,7 +159,7 @@ async function prepararModalEdicion(pub, usuario) {
     alert("Actualizado correctamente");
     location.reload();
   });
- // Eliminar publi (solo el autor)
+
   document.getElementById("btn-eliminar").addEventListener("click", async (e) => {
     e.preventDefault();
     if (!confirm("¿Eliminar publicación?")) return;
@@ -179,7 +177,7 @@ async function prepararModalEdicion(pub, usuario) {
   });
 }
 
-// Formulario comentarios nuevos 
+// Formulario para agregar comentarios
 function prepararComentarioNuevo(pubId, usuario) {
   document.getElementById("comentario-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -196,4 +194,67 @@ function prepararComentarioNuevo(pubId, usuario) {
     document.getElementById("comentario-texto").value = "";
     await cargarComentarios(pubId, usuario);
   });
+}
+
+// Mostrar el modal cuando se hace clic en "Reportar"
+document.addEventListener("click", (e) => {
+  if (e.target.matches(".btn-reportar")) {
+    e.preventDefault();
+    const id = e.target.dataset.id;
+    const tipo = e.target.dataset.tipo;
+
+    document.getElementById("reporte-id").value = id;
+    document.getElementById("reporte-tipo").value = tipo;
+    document.getElementById("mensaje-reporte").value = "";
+
+    document.getElementById("tipo-reporte-texto").textContent =
+        `Estás reportando una ${tipo === "comentario" ? "comentario" : "publicación"}.`;
+
+    const modal = new bootstrap.Modal(document.getElementById("modalReporte"));
+    modal.show();
+  }
+});
+
+// Enviar el reporte al backend
+async function enviarReporte() {
+  const id = document.getElementById("reporte-id").value;
+  const tipo = document.getElementById("reporte-tipo").value;
+  const mensaje = document.getElementById("mensaje-reporte").value.trim();
+  const token = localStorage.getItem("token");
+  const usuario = getUsuario();
+
+  if (!mensaje) {
+    alert("El mensaje no puede estar vacío.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/reportes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+      body: JSON.stringify({
+        refId: id,
+        tipo: tipo === "comentario" ? "Comentario" : "Publicacion",
+        comentarios: [mensaje],
+        autorId: usuario.id,
+        autorNombre: usuario.nombre
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Error al enviar el reporte");
+      return;
+    }
+
+    alert("Reporte enviado correctamente.");
+    bootstrap.Modal.getInstance(document.getElementById("modalReporte")).hide();
+  } catch (err) {
+    console.error("Error al enviar reporte:", err);
+    alert("Hubo un problema al enviar el reporte.");
+  }
 }

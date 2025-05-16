@@ -113,6 +113,30 @@
     </div>
   </div>
 
+<!-- Crear reporte-->
+ <div class="modal fade" id="modalReporte" tabindex="-1" aria-labelledby="modalReporteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-3 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalReporteLabel">Reportar contenido</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p id="tipo-reporte-texto"></p>
+        <input type="hidden" id="reporte-id">
+        <input type="hidden" id="reporte-tipo">
+        <label for="mensaje-reporte" class="form-label">¿Por qué deseas reportar este contenido?</label>
+        <textarea id="mensaje-reporte" class="form-control" rows="4" required></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" onclick="enviarReporte()">Enviar reporte</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <!-- Scripts -->
   <script src="/utils.js"></script>
   <script src="/funciones_publicaciones.js"></script>
