@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const pubId = new URLSearchParams(window.location.search).get("id");
+  const pubId = new URLSearchParams(window.location.search).get("id"); // viene nulo
   if (!pubId) return mostrarError("No se encontró la publicación.");
 
   try {

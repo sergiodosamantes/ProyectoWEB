@@ -142,9 +142,8 @@ const VotoComentario = mongoose.model('VotoComentario', votoComentarioSchema);
 router.post('/', async (req, res) => {
   const { titulo, contenido, autorId, etiquetas = [], archivoBase64, archivoTipo } = req.body;
 
-  if (!titulo || !contenido || !autorId) {
+  if (!titulo || !contenido || !autorId)
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-  }
 
   try {
     const nueva = new Publicacion({
@@ -158,7 +157,8 @@ router.post('/', async (req, res) => {
 
     await nueva.save();
     res.status(201).json({ mensaje: 'Publicación creada', publicacion: nueva });
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al crear publicación' });
   }
 });
@@ -170,7 +170,8 @@ router.get('/', async (req, res) => {
     const filtro = autorId ? { autorId } : {};
     const publicaciones = await Publicacion.find(filtro).sort({ fecha: -1 });
     res.json(publicaciones);
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al obtener publicaciones' });
   }
 });
@@ -179,9 +180,11 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const pub = await Publicacion.findById(req.params.id);
-    if (!pub) return res.status(404).json({ mensaje: 'No encontrada' });
+    if (!pub) 
+      return res.status(404).json({ mensaje: 'No encontrada' });
     res.json(pub);
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ mensaje: 'Error al obtener publicación' });
   }
 });
@@ -194,7 +197,8 @@ router.get('/:id/voto/:usuarioId', async (req, res) => {
       usuarioId: req.params.usuarioId
     });
     res.json(voto || null);
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al obtener voto' });
   }
 });
@@ -206,7 +210,8 @@ router.get('/:id/votos', async (req, res) => {
     const votosPositivos = await Voto.countDocuments({ publicacionId, tipo: 'up' });
     const votosNegativos = await Voto.countDocuments({ publicacionId, tipo: 'down' });
     res.json({ votosPositivos, votosNegativos });
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al contar votos' });
   }
 });
@@ -227,7 +232,8 @@ router.put('/:id', async (req, res) => {
 
     await pub.save();
     res.json({ mensaje: 'Actualizada', publicacion: pub });
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ mensaje: 'Error al actualizar' });
   }
 });
@@ -237,22 +243,24 @@ router.delete('/:id', async (req, res) => {
   const { autorId } = req.body;
   try {
     const pub = await Publicacion.findById(req.params.id);
-    if (!pub) return res.status(404).json({ mensaje: 'No encontrada' });
+    if (!pub) 
+      return res.status(404).json({ mensaje: 'No encontrada' });
 
     const usuario = await Usuario.findById(autorId);
-    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    if (!usuario) 
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
 
     // Permitir si es autor o admin
-    if (pub.autorId.toString() !== autorId && usuario.rol !== 'admin') {
+    if (pub.autorId.toString() !== autorId && usuario.rol !== 'admin') 
       return res.status(403).json({ mensaje: 'Sin permiso' });
-    }
 
     await Voto.deleteMany({ publicacionId: pub._id });
     await Comentario.deleteMany({ pubId: pub._id });
     await pub.deleteOne();
 
     res.json({ mensaje: 'Publicación eliminada' });
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ mensaje: 'Error al eliminar' });
   }
 });
@@ -262,20 +270,20 @@ router.post('/:id/votar', async (req, res) => {
   const publicacionId = req.params.id;
   const { tipo, usuarioId } = req.body;
 
-  if (!['up', 'down'].includes(tipo)) {
+  if (!['up', 'down'].includes(tipo))
     return res.status(400).json({ error: 'Tipo de voto inválido' });
-  }
 
   try {
     const votoExistente = await Voto.findOne({ publicacionId, usuarioId });
 
     if (votoExistente) {
-      if (votoExistente.tipo === tipo) {
+      if (votoExistente.tipo === tipo)
         return res.status(400).json({ error: 'Ya votaste lo mismo' });
-      }
+      
       votoExistente.tipo = tipo;
       await votoExistente.save();
-    } else {
+    } 
+    else {
       const nuevoVoto = new Voto({ publicacionId, usuarioId, tipo });
       await nuevoVoto.save();
     }
@@ -284,7 +292,8 @@ router.post('/:id/votar', async (req, res) => {
     const votosDown = await Voto.countDocuments({ publicacionId, tipo: 'down' });
 
     res.json({ votosPositivos: votosUp, votosNegativos: votosDown });
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al registrar el voto' });
   }
@@ -295,7 +304,8 @@ router.get('/:id/comentarios', async (req, res) => {
   try {
     const comentarios = await Comentario.find({ pubId: req.params.id }).sort({ fecha: 1 });
     res.json(comentarios);
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al obtener comentarios' });
   }
 });
@@ -318,7 +328,8 @@ router.post('/:id/comentarios', async (req, res) => {
     });
     await nuevoComentario.save();
     res.status(201).json({ mensaje: 'Comentario agregado', comentario: nuevoComentario });
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al guardar el comentario' });
   }
 });
@@ -328,7 +339,8 @@ router.get('/comentarios/:id/voto/:usuarioId', async (req, res) => {
     const { id, usuarioId } = req.params;
     const voto = await VotoComentario.findOne({ comentarioId: id, usuarioId });
     res.json(voto || null);
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al obtener voto del comentario' });
   }
 });
@@ -337,20 +349,20 @@ router.post('/comentarios/:id/votar', async (req, res) => {
   const comentarioId = req.params.id;
   const { tipo, usuarioId } = req.body;
 
-  if (!['up', 'down'].includes(tipo)) {
+  if (!['up', 'down'].includes(tipo))
     return res.status(400).json({ error: 'Tipo de voto inválido' });
-  }
 
   try {
     let voto = await VotoComentario.findOne({ comentarioId, usuarioId });
 
     if (voto) {
-      if (voto.tipo === tipo) {
+      if (voto.tipo === tipo)
         return res.status(400).json({ error: 'Ya votaste lo mismo' });
-      }
+
       voto.tipo = tipo;
       await voto.save();
-    } else {
+    } 
+    else {
       voto = new VotoComentario({ comentarioId, usuarioId, tipo });
       await voto.save();
     }
@@ -359,7 +371,8 @@ router.post('/comentarios/:id/votar', async (req, res) => {
     const votosNegativos = await VotoComentario.countDocuments({ comentarioId, tipo: 'down' });
 
     res.json({ votosPositivos, votosNegativos });
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al registrar el voto en comentario' });
   }
@@ -372,15 +385,15 @@ router.delete('/comentarios/:id', async (req, res) => {
     const comentario = await Comentario.findById(req.params.id);
     if (!comentario) return res.status(404).json({ error: 'Comentario no encontrado' });
 
-    if (comentario.autorId.toString() !== usuarioId) {
+    if (comentario.autorId.toString() !== usuarioId) 
       return res.status(403).json({ error: 'No tienes permiso para eliminar este comentario' });
-    }
 
     await VotoComentario.deleteMany({ comentarioId: comentario._id }); // Borra votos del comentario
     await comentario.deleteOne();
 
     res.json({ mensaje: 'Comentario eliminado' });
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al eliminar el comentario' });
   }
@@ -389,23 +402,22 @@ router.delete('/comentarios/:id', async (req, res) => {
 router.put('/comentarios/:id', async (req, res) => {
   const { contenido, usuarioId } = req.body;
 
-  if (!contenido || !usuarioId) {
+  if (!contenido || !usuarioId)
     return res.status(400).json({ error: 'Faltan campos obligatorios' });
-  }
 
   try {
     const comentario = await Comentario.findById(req.params.id);
     if (!comentario) return res.status(404).json({ error: 'Comentario no encontrado' });
 
-    if (comentario.autorId.toString() !== usuarioId) {
+    if (comentario.autorId.toString() !== usuarioId)
       return res.status(403).json({ error: 'No tienes permiso para editar este comentario' });
-    }
 
     comentario.contenido = contenido;
     await comentario.save();
 
     res.json({ mensaje: 'Comentario editado correctamente', comentario });
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al editar el comentario' });
   }
 });
@@ -417,7 +429,8 @@ router.get('/comentarios/:id/votos', async (req, res) => {
     const votosPositivos = await VotoComentario.countDocuments({ comentarioId, tipo: 'up' });
     const votosNegativos = await VotoComentario.countDocuments({ comentarioId, tipo: 'down' });
     res.json({ votosPositivos, votosNegativos });
-  } catch (err) {
+  } 
+  catch (err) {
     res.status(500).json({ error: 'Error al contar votos del comentario' });
   }
 });
@@ -426,9 +439,8 @@ router.get('/comentarios/:id/votos', async (req, res) => {
 router.post('/reportes', async (req, res) => {
   const { refId, tipo, comentarios, autorId, autorNombre } = req.body;
 
-  if (!refId || !tipo || !comentarios || !autorId || !autorNombre) {
+  if (!refId || !tipo || !comentarios || !autorId || !autorNombre)
     return res.status(400).json({ error: 'Faltan campos obligatorios' });
-  }
 
   try {
     const nuevo = new Reporte({ refId, tipo, comentarios, autorId, autorNombre });
@@ -439,7 +451,8 @@ router.post('/reportes', async (req, res) => {
       await Publicacion.findByIdAndUpdate(refId, { reportado: true });
 
     res.status(201).json({ mensaje: 'Reporte creado correctamente', reporte: nuevo });
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al crear el reporte' });
   }
@@ -471,12 +484,13 @@ router.put('/reportes/:id', async (req, res) => {
     await Reporte.updateMany({ refId: id }, { resuelto: !!resuelto });
 
     // Si se resolvieron todos, desmarcar la publicación como reportada
-    if (resuelto) {
+    if (resuelto)
       await Publicacion.findByIdAndUpdate(id, { reportado: false });
-    }
+
 
     res.json({ mensaje: 'Reportes actualizados como resueltos' });
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al actualizar los reportes' });
   }
@@ -489,7 +503,8 @@ router.get('/reportes/:id', async (req, res) => {
   try {
     const reportes = await Reporte.find({ refId: id });
     res.json(reportes);
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error al obtener reportes" });
   }
@@ -500,12 +515,11 @@ router.get('/reportadas', async (req, res) => {
   try {
     const publicaciones = await Publicacion.find({ reportado: true });
     res.json(publicaciones);
-  } catch (err) {
+  }
+  catch (err) {
     console.error("Error en GET /reportadas:", err); // Agrega esto
     res.status(500).json({ error: 'Error al obtener publicaciones reportadas' });
   }
 });
-
-
 
 module.exports = router;
